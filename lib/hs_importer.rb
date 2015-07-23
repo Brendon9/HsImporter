@@ -1,10 +1,34 @@
-require "hs_importer/version"
+$:.push File.dirname(__FILE__)
+
 require 'rubygems'
-require 'hashie'
+require 'csv'
+require 'json'
+require 'dante'
+require 'logger'
 require 'eventmachine'
 require 'eventmachine-tail'
+require 'em-http-request'
+require 'active_support'
+require 'active_support/core_ext'
+require 'hs_importer/version'
+
+module Importer
+  module ClassMethods
+    def logger
+      if !@logger
+        @logger = Logger.new(STDOUT)
+      else
+        @logger
+      end
+    end
+  end
+
+  extend ClassMethods
+end
+
 
 module HsImporter
+
   @path = ARGV[0]
   @pipeline = []
 

@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/hs_importer'
+
+runner = Dante::Runner.new('import')
+runner.description = 'uploads hearthstone logs'
+
+runner.with_options do |opts|
+  opts.separator ''
+  opts.separator 'Script specific usage:'
+
+  opts.on('-f', '--file [FILE_PATH]', String, 'Path to a local file to import') do |f|
+    options[:file] = f
+  end
+
+  opts.separator ''
+  opts.separator 'Common options:'
+
+  opts.on_tail('-v', '--version', 'Show version') do
+    puts 'importer #{Importer::VERSION}'
+    exit
+  end
+
+  opts.on_tail('-h', '--help', 'Show this message') do
+    puts opts
+    exit
+  end
+end
+
+runner.execute do |opts|
+  importer = HsImporter.new(opts)
+  importer.run
+end
